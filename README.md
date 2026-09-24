@@ -43,14 +43,31 @@ handshake, before a single block is offered.
 
 ## Running a node
 
-Linux x86-64 only for now.
+Linux x86-64 only for now. Copy this whole block:
 
 ```bash
-tar xzf jetsam-testnet-linux-x86_64.tar.gz
+curl -LO https://github.com/jetsam-chain/jetsam-testnet/releases/latest/download/jetsam-testnet-v1.4.0-linux-x86_64.tar.gz
+tar xzf jetsam-testnet-v1.4.0-linux-x86_64.tar.gz
+cd jetsam-testnet-linux-x86_64
+
 ./jetsam --data-dir ~/.jetsam-testnet \
-         --p2p-listen 0.0.0.0:9710 --rpc-listen 127.0.0.1:9711
-./jetsam-cli status          # talks to 9711 by default in this build
+         --p2p-listen 0.0.0.0:9710 --rpc-listen 127.0.0.1:9711 \
+         --seed 193.160.130.205:9710
 ```
+
+The node prints its network on the first line. It must say **`· testnet`** —
+if it says `mainnet`, you are running the wrong binary, stop there.
+
+In a second terminal, from the same directory:
+
+```bash
+./jetsam-cli status          # finds the daemon on 9711 without --rpc
+```
+
+Every release is listed at
+[github.com/jetsam-chain/jetsam-testnet/releases](https://github.com/jetsam-chain/jetsam-testnet/releases).
+Download the **`.tar.gz` asset** — not the "Source code" link, which contains
+no binaries.
 
 Add `--mode miner --cpu-threads N` to mine.
 
