@@ -34,6 +34,7 @@ weeks and stop proving anything.
 | P2P / RPC ports | 9700 / 9701 | **9710 / 9711** |
 | data directory | `jetsam` | **`jetsam-testnet`** |
 | genesis | `6e592c07…448c5f44` | **`b3efb3c1…110f996d`** |
+| proof of work | Poseidon2b sponge | **TowerWalk, since block 4650** |
 | coin value | a market decides | **none, by design** |
 
 The two networks cannot connect to each other: different genesis means a
@@ -51,9 +52,25 @@ tar xzf jetsam-testnet-linux-x86_64.tar.gz
 ./jetsam-cli status          # talks to 9711 by default in this build
 ```
 
-Add `--mode miner --cpu-threads N` to mine. Note that block cadence here is set
-by **proof time, not proof of work**: each block carries a recursive proof, and
-that proof is what your CPU count actually buys.
+Add `--mode miner --cpu-threads N` to mine.
+
+### What you are testing
+
+Since block 4650 this chain runs **TowerWalk**, a cache-resident proof of work.
+Each attempt walks a 512 KiB scratchpad through 524 288 dependent reads: the
+address of one read cannot be computed until the previous one has returned. No
+amount of parallelism removes that chain — only memory latency at the innermost
+cache level does.
+
+That working set is chosen to sit inside a CPU's private L2 cache and outside
+what a GPU can give each of the thousands of threads it needs to keep its
+arithmetic units busy. **On this chain a CPU is the sensible machine to mine
+with, and that is the property under test.** A GPU miner built for the previous
+digest is refused by the node, every time, with
+`proof of work: digest is not below the target`.
+
+A block still carries a recursive proof, and proving still costs wall-clock
+time. The difference since 4650 is that the search now costs something too.
 
 ## Faucet
 
