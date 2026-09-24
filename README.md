@@ -46,8 +46,8 @@ handshake, before a single block is offered.
 Linux x86-64 only for now. Copy this whole block:
 
 ```bash
-curl -LO https://github.com/jetsam-chain/jetsam-testnet/releases/latest/download/jetsam-testnet-v1.4.0-linux-x86_64.tar.gz
-tar xzf jetsam-testnet-v1.4.0-linux-x86_64.tar.gz
+curl -LO https://github.com/jetsam-chain/jetsam-testnet/releases/latest/download/jetsam-testnet-linux-x86_64.tar.gz
+tar xzf jetsam-testnet-linux-x86_64.tar.gz
 cd jetsam-testnet-linux-x86_64
 
 ./jetsam --data-dir ~/.jetsam-testnet \
@@ -61,7 +61,18 @@ if it says `mainnet`, you are running the wrong binary, stop there.
 In a second terminal, from the same directory:
 
 ```bash
-./jetsam-cli status          # finds the daemon on 9711 without --rpc
+./jetsam-cli balance         # what you have
+./jetsam-cli mining          # hashrate, difficulty, block reward
+./jetsam-cli status          # height and chain tip
+```
+
+The CLI finds the daemon on 9711 by itself; `--rpc` is only for a node
+somewhere else. Mining prints two lines worth watching, and they are coloured
+so they do not disappear into the sync traffic:
+
+```
+⛏  8.30 kH/s  16 threads · 1188132 hashes total
+✅ BLOCK WON — block accepted #5629   50 JTM · pow 20.5s · proof 12.4s
 ```
 
 Every release is listed at
